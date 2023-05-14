@@ -1,0 +1,26 @@
+server:
+  port: '7100'
+
+cloud:
+  gateway:
+    uri: ${GATEWAY_URI}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${DISCOVERY_URL}
+
+spring:
+  application:
+    name: file-storage
+  servlet:
+    multipart:
+      enabled: 'true'
+      max-request-size: 215MB
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+
+file:
+  upload-dir: ./images
