@@ -34,6 +34,7 @@ public class FileStorageController {
     public ResponseEntity<Response> uploadImage(@RequestParam("file") MultipartFile file,
                                                 @RequestParam("userName") String userName) throws IOException {
         Response res = new Response();
+        System.out.println("uploadImage");
         try{
             String result = fileStorageService.saveFile(file, userName);
             res.setImageLocation("/"+userName+"/"+result);
