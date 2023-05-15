@@ -20,7 +20,6 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/file-storage")
 public class FileStorageController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileStorageController.class);
