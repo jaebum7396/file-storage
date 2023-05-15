@@ -15,7 +15,7 @@ spring:
   application:
     name: file-storage
   profiles:
-    active: local
+    active: deploy
   servlet:
     multipart:
       enabled: 'true'
