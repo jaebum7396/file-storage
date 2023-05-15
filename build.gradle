@@ -12,6 +12,10 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	set('springCloudVersion', "2021.0.5")
+}
+
 dependencies {
 	//common
 	implementation 'org.springframework.boot:spring-boot-starter'
@@ -19,9 +23,22 @@ dependencies {
 	implementation group: 'org.json', name: 'json', version: '20180813'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
+	//security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	//data
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	//cloud
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 tasks.named('test') {

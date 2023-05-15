@@ -1,0 +1,10 @@
+cloud:
+  gateway:
+    uri: ${GATEWAY_URI}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${DISCOVERY_URL}

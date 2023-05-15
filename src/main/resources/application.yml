@@ -11,10 +11,11 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: ${DISCOVERY_URL}
-
 spring:
   application:
     name: file-storage
+  profiles:
+    active: local
   servlet:
     multipart:
       enabled: 'true'
@@ -23,4 +24,4 @@ spring:
       max-file-size: 200MB
 
 file:
-  upload-dir: ./images
+  uploadDir: ./images
