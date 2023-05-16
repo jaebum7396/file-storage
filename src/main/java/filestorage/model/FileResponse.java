@@ -1,0 +1,42 @@
+package filestorage.model;
+
+import java.util.List;
+
+public class FileResponse {
+    private String message;
+    private String imageLocation;
+    private List<String> imageLocations;
+    private boolean success;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getImageLocation() {
+        return imageLocation;
+    }
+
+    public void setImageLocation(String imageLocation) {
+        this.imageLocation = imageLocation;
+    }
+
+    public List<String> getImageLocations() {
+        return imageLocations;
+    }
+
+    public void setImageLocations(List<String> imageLocations) {
+        this.imageLocations = imageLocations;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+}

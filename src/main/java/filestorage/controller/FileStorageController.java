@@ -1,6 +1,6 @@
 package filestorage.controller;
 
-import filestorage.model.Response;
+import filestorage.model.FileResponse;
 import filestorage.service.FileStorageService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -47,14 +47,17 @@ public class FileStorageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<Response> uploadImage(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException {
-        Response res = new Response();
+    public ResponseEntity<FileResponse> uploadImage(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException {
+        FileResponse res = new FileResponse();
         System.out.println("uploadImage");
         try{
             Claims claim = getClaims(request);
             String userId = claim.getSubject();;
+            System.out.println("userId : "+userId);
             Long domainCd = claim.get("domainCd", Long.class);
+            System.out.println("domainCd"+domainCd);
             Long userCd = claim.get("userCd", Long.class);
+            System.out.println("userCd"+userCd);
 
             System.out.println("domainCd"+domainCd+" userCd : "+userCd+" userId : "+userId);
 
@@ -63,18 +66,18 @@ public class FileStorageController {
             System.out.println(domainCd+"/"+userCd+"/"+userId+"/"+result);
             res.setMessage("done");
             res.setSuccess(true);
-            return new ResponseEntity<Response>(res, HttpStatus.OK);
+            return new ResponseEntity<FileResponse>(res, HttpStatus.OK);
         }catch (Exception e){
             res.setMessage("failed");
             res.setSuccess(false);
-            return new ResponseEntity<Response>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<FileResponse>(res, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/post/upload")
-    public ResponseEntity<Response> postImageUpload(@RequestParam("files") MultipartFile[] files,
-                                                    @RequestParam("postName")String postName) {
-        Response res = new Response();
+    public ResponseEntity<FileResponse> postImageUpload(@RequestParam("files") MultipartFile[] files,
+                                                        @RequestParam("postName")String postName) {
+        FileResponse res = new FileResponse();
         List<String> results = new ArrayList<>();
         List<String> imageLocations = new ArrayList<>();
         try{
@@ -85,11 +88,11 @@ public class FileStorageController {
             res.setImageLocations(imageLocations);
             res.setMessage("done");
             res.setSuccess(true);
-            return new ResponseEntity<Response>(res, HttpStatus.OK);
+            return new ResponseEntity<FileResponse>(res, HttpStatus.OK);
         }catch (Exception e){
             res.setMessage("failed");
             res.setSuccess(false);
-            return new ResponseEntity<Response>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<FileResponse>(res, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
