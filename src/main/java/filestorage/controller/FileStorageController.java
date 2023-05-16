@@ -67,7 +67,7 @@ public class FileStorageController {
 
             System.out.println("domainCd"+domainCd+" userCd : "+userCd+" userId : "+userId);
 
-            String result = fileStorageService.saveFile(file, userId);
+            String result = fileStorageService.saveFile(file, domainCd+"/"+userCd+"/"+userId);
             res.setImageLocation(domainCd+"/"+userCd+"/"+userId+"/"+result);
             System.out.println(domainCd+"/"+userCd+"/"+userId+"/"+result);
             res.setMessage("done");

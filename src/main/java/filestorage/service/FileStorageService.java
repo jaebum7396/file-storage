@@ -64,12 +64,14 @@ public class FileStorageService {
         return fileNames;
     }
 
-    public String saveFile(MultipartFile file, String userName) throws IOException {
+    public String saveFile(MultipartFile file, String pathParam) throws IOException {
 
         String randomStr = getRandomStr();
         String fileName = randomStr + StringUtils.cleanPath(file.getOriginalFilename());
 
-        Path uploadPath = Paths.get(this.uploadPath+"/"+userName);
+        Path uploadPath = Paths.get(this.uploadPath+"/"+pathParam);
+
+        System.out.println("uploadPath : " + uploadPath.toString());
         if(!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
