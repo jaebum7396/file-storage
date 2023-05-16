@@ -52,7 +52,7 @@ public class FileStorageController {
         System.out.println("uploadImage");
         try{
             Claims claim = getClaims(request);
-            String userId = claim.get("userId", String.class);
+            String userId = claim.getSubject();;
             Long userCd = claim.get("userCd", Long.class);
 
             System.out.println("userId : "+userId+" userCd : "+userCd);
