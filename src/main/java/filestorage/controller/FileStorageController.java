@@ -54,7 +54,7 @@ public class FileStorageController {
             Claims claim = getClaims(request);
             String userId = claim.getSubject();;
             System.out.println("userId : "+userId);
-            Long domainCd = claim.get("domainCd", Long.class);
+            String domainCd = claim.get("domainCd", String.class);
             System.out.println("domainCd"+domainCd);
             Long userCd = claim.get("userCd", Long.class);
             System.out.println("userCd"+userCd);
