@@ -55,8 +55,11 @@ public class FileStorageController {
             String userId = claim.get("userId", String.class);
             Long userCd = claim.get("userCd", Long.class);
 
+            System.out.println("userId : "+userId+" userCd : "+userCd);
+
             String result = fileStorageService.saveFile(file, userId);
             res.setImageLocation("/"+userId+"/"+result);
+            System.out.println("/"+userId+"/"+result);
             res.setMessage("done");
             res.setSuccess(true);
             return new ResponseEntity<Response>(res, HttpStatus.OK);
