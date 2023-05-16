@@ -53,13 +53,14 @@ public class FileStorageController {
         try{
             Claims claim = getClaims(request);
             String userId = claim.getSubject();;
+            Long domainCd = claim.get("domainCd", Long.class);
             Long userCd = claim.get("userCd", Long.class);
 
-            System.out.println("userId : "+userId+" userCd : "+userCd);
+            System.out.println("domainCd"+domainCd+" userCd : "+userCd+" userId : "+userId);
 
             String result = fileStorageService.saveFile(file, userId);
-            res.setImageLocation("/"+userId+"/"+result);
-            System.out.println("/"+userId+"/"+result);
+            res.setImageLocation(domainCd+"/"+userCd+"/"+userId+"/"+result);
+            System.out.println(domainCd+"/"+userCd+"/"+userId+"/"+result);
             res.setMessage("done");
             res.setSuccess(true);
             return new ResponseEntity<Response>(res, HttpStatus.OK);
@@ -92,12 +93,14 @@ public class FileStorageController {
         }
     }
 
-    @GetMapping("/display/{userName}/{fileName:.+}")
-    public ResponseEntity<Resource> displayImage(@PathVariable String fileName,
-                                                 @PathVariable String userName,
+    @GetMapping("/display/{domainCd}/{userCd}/{userId}/{fileName:.+}")
+    public ResponseEntity<Resource> displayImage(@PathVariable String domainCd,
+                                                 @PathVariable String userCd,
+                                                 @PathVariable String userId,
+                                                 @PathVariable String fileName,
                                                  HttpServletRequest request) {
         // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(userName, fileName);
+        Resource resource = fileStorageService.loadFileAsResource(domainCd+"/"+userCd+"/"+userId, fileName);
 
         // Try to determine file's content type
         String contentType = null;

@@ -83,8 +83,8 @@ public class FileStorageService {
         }
     }
 
-    public Resource loadFileAsResource(String userName, String fileName) {
-        Path uploadPath = Paths.get(this.uploadPath+"/"+userName);
+    public Resource loadFileAsResource(String pathParam, String fileName) {
+        Path uploadPath = Paths.get(this.uploadPath+"/"+pathParam);
         Resource resource = null;
         try {
             Path filePath = uploadPath.resolve(fileName).normalize();
