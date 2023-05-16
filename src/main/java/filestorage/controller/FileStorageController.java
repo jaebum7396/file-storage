@@ -5,6 +5,9 @@ import filestorage.service.FileStorageService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@Api(tags = "FileStorageController")
+@Tag(name = "FileStorageController", description = "파일 업로드, 파일 불러오기")
 @RestController
 public class FileStorageController {
 
@@ -47,6 +52,7 @@ public class FileStorageController {
     }
 
     @PostMapping("/upload")
+    @Operation(summary="파일 업로드", description="파일 업로드")
     public ResponseEntity<FileResponse> uploadImage(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException {
         FileResponse res = new FileResponse();
         System.out.println("uploadImage");
@@ -97,6 +103,7 @@ public class FileStorageController {
     }
 
     @GetMapping("/display/{domainCd}/{userCd}/{userId}/{fileName:.+}")
+    @Operation(summary="파일 불러오기", description="파일 불러오기")
     public ResponseEntity<Resource> displayImage(@PathVariable String domainCd,
                                                  @PathVariable String userCd,
                                                  @PathVariable String userId,
