@@ -2,9 +2,13 @@ package filestorage.controller;
 
 import filestorage.model.Response;
 import filestorage.service.FileStorageService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,19 +31,32 @@ public class FileStorageController {
     private static final Logger logger = LoggerFactory.getLogger(FileStorageController.class);
     private final FileStorageService fileStorageService;
 
+    @Value("${jwt.secret.key}")
+    private String JWT_SECRET_KEY;
+
+    public Claims getClaims(HttpServletRequest request) {
+        Key secretKey = Keys.hmacShaKeyFor(JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+        Claims claim = Jwts.parserBuilder().setSigningKey(secretKey).build()
+                .parseClaimsJws(request.getHeader("authorization")).getBody();
+        return claim;
+    }
+
     @Autowired
     public FileStorageController(FileStorageService fileStorageService){
         this.fileStorageService = fileStorageService;
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<Response> uploadImage(@RequestParam("file") MultipartFile file,
-                                                @RequestParam("userName") String userName) throws IOException {
+    public ResponseEntity<Response> uploadImage(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException {
         Response res = new Response();
         System.out.println("uploadImage");
         try{
-            String result = fileStorageService.saveFile(file, userName);
-            res.setImageLocation("/"+userName+"/"+result);
+            Claims claim = getClaims(request);
+            String userId = claim.get("userId", String.class);
+            Long userCd = claim.get("userCd", Long.class);
+
+            String result = fileStorageService.saveFile(file, userId);
+            res.setImageLocation("/"+userId+"/"+result);
             res.setMessage("done");
             res.setSuccess(true);
             return new ResponseEntity<Response>(res, HttpStatus.OK);
