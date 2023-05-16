@@ -1,6 +1,7 @@
 package filestorage.controller;
 
 import filestorage.model.FileResponse;
+import filestorage.model.Response;
 import filestorage.service.FileStorageService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -53,7 +54,7 @@ public class FileStorageController {
 
     @PostMapping("/upload")
     @Operation(summary="파일 업로드", description="파일 업로드")
-    public ResponseEntity<FileResponse> uploadImage(HttpServletRequest request, @RequestParam String division, @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<Response> upload(HttpServletRequest request, @RequestParam String division, @RequestParam("file") MultipartFile file) throws IOException {
         System.out.println("uploadImage");
         String path = division;  // division 변수를 path 변수에 할당
 
@@ -69,9 +70,9 @@ public class FileStorageController {
         return fileStorageService.saveFile(file, path);  // 파일 저장 서비스를 사용하여 파일을 저장하고 결과 반환
     }
 
-    @GetMapping("/display/{fileLocation}")
+    @GetMapping("/display")
     @Operation(summary="파일 불러오기", description="파일 불러오기")
-    public ResponseEntity<Resource> displayImage(@PathVariable String fileLocation, HttpServletRequest request){
+    public ResponseEntity<Resource> display(HttpServletRequest request, @RequestParam String fileLocation){
         try{
             // Load file as Resource
             Resource resource = fileStorageService.loadFileAsResource(fileLocation);
