@@ -11,11 +11,12 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: ${DISCOVERY_URL}
+
 spring:
   application:
     name: file-storage
   profiles:
-    active: deploy
+    active: local
   servlet:
     multipart:
       enabled: 'true'
