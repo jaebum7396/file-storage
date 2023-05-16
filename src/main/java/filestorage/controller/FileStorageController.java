@@ -53,81 +53,48 @@ public class FileStorageController {
 
     @PostMapping("/upload")
     @Operation(summary="파일 업로드", description="파일 업로드")
-    public ResponseEntity<FileResponse> uploadImage(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException {
-        FileResponse res = new FileResponse();
+    public ResponseEntity<FileResponse> uploadImage(HttpServletRequest request, @RequestParam String division, @RequestParam("file") MultipartFile file) throws IOException {
         System.out.println("uploadImage");
-        try{
-            Claims claim = getClaims(request);
-            String userId = claim.getSubject();;
-            System.out.println("userId : "+userId);
-            String domainCd = claim.get("domainCd", String.class);
-            System.out.println("domainCd"+domainCd);
-            Long userCd = claim.get("userCd", Long.class);
-            System.out.println("userCd"+userCd);
+        String path = division;  // division 변수를 path 변수에 할당
 
-            System.out.println("domainCd"+domainCd+" userCd : "+userCd+" userId : "+userId);
+        Claims claim = getClaims(request);  // 요청에서 클레임 정보를 가져옴
+        String userId = claim.getSubject();  // 클레임에서 사용자 ID를 가져옴
+        String domainCd = claim.get("domainCd", String.class);  // 클레임에서 도메인 코드를 가져옴
+        Long userCd = claim.get("userCd", Long.class);  // 클레임에서 사용자 코드를 가져옴
 
-            String result = fileStorageService.saveFile(file, domainCd+"/"+userCd+"/"+userId);
-            res.setImageLocation(domainCd+"/"+userCd+"/"+userId+"/"+result);
-            System.out.println(domainCd+"/"+userCd+"/"+userId+"/"+result);
-            res.setMessage("done");
-            res.setSuccess(true);
-            return new ResponseEntity<FileResponse>(res, HttpStatus.OK);
-        }catch (Exception e){
-            res.setMessage("failed");
-            res.setSuccess(false);
-            return new ResponseEntity<FileResponse>(res, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        path = path+"/"+domainCd+"/"+userCd+"/"+userId;  // path 변수에 도메인 코드, 사용자 코드, 사용자 ID를 포함한 경로 생성
+
+        System.out.println("path : "+path);  // 생성된 경로 출력
+
+        return fileStorageService.saveFile(file, path);  // 파일 저장 서비스를 사용하여 파일을 저장하고 결과 반환
     }
 
-    @PostMapping("/post/upload")
-    public ResponseEntity<FileResponse> postImageUpload(@RequestParam("files") MultipartFile[] files,
-                                                        @RequestParam("postName")String postName) {
-        FileResponse res = new FileResponse();
-        List<String> results = new ArrayList<>();
-        List<String> imageLocations = new ArrayList<>();
-        try{
-            results = fileStorageService.saveFiles(files, postName);
-            for(String result : results){
-                imageLocations.add("/"+postName+"/"+result);
-            }
-            res.setImageLocations(imageLocations);
-            res.setMessage("done");
-            res.setSuccess(true);
-            return new ResponseEntity<FileResponse>(res, HttpStatus.OK);
-        }catch (Exception e){
-            res.setMessage("failed");
-            res.setSuccess(false);
-            return new ResponseEntity<FileResponse>(res, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/display/{domainCd}/{userCd}/{userId}/{fileName:.+}")
+    @GetMapping("/display/{fileLocation}")
     @Operation(summary="파일 불러오기", description="파일 불러오기")
-    public ResponseEntity<Resource> displayImage(@PathVariable String domainCd,
-                                                 @PathVariable String userCd,
-                                                 @PathVariable String userId,
-                                                 @PathVariable String fileName,
-                                                 HttpServletRequest request) {
-        // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(domainCd+"/"+userCd+"/"+userId, fileName);
+    public ResponseEntity<Resource> displayImage(@PathVariable String fileLocation, HttpServletRequest request){
+        try{
+            // Load file as Resource
+            Resource resource = fileStorageService.loadFileAsResource(fileLocation);
 
-        // Try to determine file's content type
-        String contentType = null;
-        try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        } catch (IOException ex) {
-            logger.info("Could not determine file type.");
+            // Try to determine file's content type
+            String contentType = null;
+            try {
+                contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            } catch (IOException ex) {
+                logger.info("Could not determine file type.");
+            }
+
+            // Fallback to the default content type if type could not be determined
+            if(contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
-            contentType = "application/octet-stream";
-        }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
     }
 }
