@@ -1,3 +1,6 @@
+cloud:
+  gateway:
+    uri: ${LOCAL_URL}
 spring:
   cloud:
     service-registry:
