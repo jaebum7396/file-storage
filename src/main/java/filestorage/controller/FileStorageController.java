@@ -61,7 +61,7 @@ public class FileStorageController {
         Claims claim = getClaims(request);  // 요청에서 클레임 정보를 가져옴
         String userId = claim.getSubject();  // 클레임에서 사용자 ID를 가져옴
         String domainCd = claim.get("domainCd", String.class);  // 클레임에서 도메인 코드를 가져옴
-        Long userCd = claim.get("userCd", Long.class);  // 클레임에서 사용자 코드를 가져옴
+        String userCd = claim.get("userCd", String.class);  // 클레임에서 사용자 코드를 가져옴
 
         path = path+"/"+domainCd+"/"+userCd+"/"+userId;  // path 변수에 도메인 코드, 사용자 코드, 사용자 ID를 포함한 경로 생성
 
