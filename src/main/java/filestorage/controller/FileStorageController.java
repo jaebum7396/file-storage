@@ -56,7 +56,7 @@ public class FileStorageController {
     @Operation(summary="파일 업로드", description="파일 업로드")
     public ResponseEntity<Response> upload(HttpServletRequest request, @RequestParam String division, @RequestParam("file") MultipartFile file) throws IOException {
         System.out.println("uploadImage");
-        String path = division;  // division 변수를 path 변수에 할당
+        String path = "http://www.aflk-chat.com:8000/file-storage/display?filelocation="+division+"/"; // 기본 경로
 
         Claims claim = getClaims(request);  // 요청에서 클레임 정보를 가져옴
         String userId = claim.getSubject();  // 클레임에서 사용자 ID를 가져옴
@@ -71,7 +71,7 @@ public class FileStorageController {
     }
 
     @GetMapping("/display")
-    @Operation(summary="파일 불러오기", description="파일 불러오기")
+    @Operation(summary="파일 불러오기", description="권한이 필요 없는 전체 공개된 파일에 접근합니다.")
     public ResponseEntity<Resource> display(HttpServletRequest request, @RequestParam String fileLocation){
         try{
             // Load file as Resource
@@ -94,6 +94,7 @@ public class FileStorageController {
                     .contentType(MediaType.parseMediaType(contentType))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                     .body(resource);
+
         }catch(Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
