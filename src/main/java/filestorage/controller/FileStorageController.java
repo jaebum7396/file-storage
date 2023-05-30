@@ -56,7 +56,7 @@ public class FileStorageController {
     @Operation(summary="파일 업로드", description="파일 업로드")
     public ResponseEntity<Response> upload(HttpServletRequest request, @RequestParam String division, @RequestParam("file") MultipartFile file) throws IOException {
         System.out.println("uploadImage");
-        String path = "http://www.aflk-chat.com:8000/file-storage/display?fileLocation="+division+"/"; // 기본 경로
+        String path = "http://www.aflk-chat.com:8000/file-storage/display?fileLocation="+division; // 기본 경로
 
         Claims claim = getClaims(request);  // 요청에서 클레임 정보를 가져옴
         String userId = claim.getSubject();  // 클레임에서 사용자 ID를 가져옴
