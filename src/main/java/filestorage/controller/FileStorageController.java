@@ -53,15 +53,14 @@ public class FileStorageController {
     @Operation(summary="파일 업로드", description="파일 업로드")
     public ResponseEntity<Response> upload(HttpServletRequest request, @RequestParam String division, @RequestParam("file") MultipartFile file) throws IOException {
         System.out.println("uploadImage");
-        String path = division;  // division 변수를 path 변수에 할당
+        String path = "";  // division 변수를 path 변수에 할당
 
         Claims claim = getClaims(request);  // 요청에서 클레임 정보를 가져옴
         String userId = claim.getSubject();  // 클레임에서 사용자 ID를 가져옴
         String domainCd = claim.get("domainCd", String.class);  // 클레임에서 도메인 코드를 가져옴
         String userCd = claim.get("userCd", String.class);  // 클레임에서 사용자 코드를 가져옴
 
-        path = path+"/"+domainCd+"/"+userCd+"/"+userId;  // path 변수에 도메인 코드, 사용자 코드, 사용자 ID를 포함한 경로 생성
-
+        path = domainCd+"/"+userCd+"/"+division;  // path 변수에 도메인 코드, 사용자 코드, 사용자 ID를 포함한 경로 생성
         System.out.println("path : "+path);  // 생성된 경로 출력
 
         return fileStorageService.saveFile(file, path);  // 파일 저장 서비스를 사용하여 파일을 저장하고 결과 반환
@@ -100,6 +99,16 @@ public class FileStorageController {
     @DeleteMapping("/delete")
     @Operation(summary = "파일 삭제", description = "파일을 삭제합니다.")
     public ResponseEntity<Response> delete(HttpServletRequest request, @RequestParam String fileLocation) {
+        String path = "";  // division 변수를 path 변수에 할당
+
+        Claims claim = getClaims(request);  // 요청에서 클레임 정보를 가져옴
+        String userId = claim.getSubject();  // 클레임에서 사용자 ID를 가져옴
+        String domainCd = claim.get("domainCd", String.class);  // 클레임에서 도메인 코드를 가져옴
+        String userCd = claim.get("userCd", String.class);  // 클레임에서 사용자 코드를 가져옴
+
+        path = domainCd+"/"+userCd+"/";  // path 변수에 도메인 코드, 사용자 코드, 사용자 ID를 포함한 경로 생성
+        System.out.println("path : "+path+" / "+"fileLocation : "+fileLocation);  // 생성된 경로 출력
+
         try {
             // 파일 삭제 서비스를 사용하여 파일을 삭제
             boolean deleted = fileStorageService.deleteFile(fileLocation);
