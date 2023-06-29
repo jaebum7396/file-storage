@@ -92,19 +92,17 @@ public class FileStorageService {
         }
     }
 
-    public boolean deleteFile(String fileLocation) {
+    public boolean deleteFile(String fileLocation) throws FileNotFoundException {
         try {
-            // 파일을 삭제하는 로직을 구현하세요.
-            // 예를 들어, java.io.File 클래스를 사용하여 파일을 삭제할 수 있습니다.
-            File file = new File(fileLocation);
+            //Path filePath = uploadPath.resolve(fileName).normalize();
+            File file = new File(this.uploadPath+"/"+fileLocation);
             if (file.exists()) {
                 return file.delete(); // 파일 삭제 성공 시 true를 반환
             } else {
-                return false; // 파일이 존재하지 않는 경우 false를 반환
+                throw new FileNotFoundException("File not found " + fileLocation);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false; // 파일 삭제 중 오류가 발생한 경우 false를 반환
+        } catch (FileNotFoundException ex) {
+            throw new FileNotFoundException("File not found " + fileLocation);
         }
     }
 }
