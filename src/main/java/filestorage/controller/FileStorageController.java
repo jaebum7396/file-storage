@@ -1,6 +1,5 @@
 package filestorage.controller;
 
-import filestorage.model.FileResponse;
 import filestorage.model.Response;
 import filestorage.service.FileStorageService;
 import io.jsonwebtoken.Claims;
@@ -25,8 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Api(tags = "FileStorageController")
@@ -97,6 +94,23 @@ public class FileStorageController {
 
         }catch(Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "파일 삭제", description = "파일을 삭제합니다.")
+    public ResponseEntity<Response> delete(HttpServletRequest request, @RequestParam String fileLocation) {
+        try {
+            // 파일 삭제 서비스를 사용하여 파일을 삭제
+            boolean deleted = fileStorageService.deleteFile(fileLocation);
+
+            if (deleted) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

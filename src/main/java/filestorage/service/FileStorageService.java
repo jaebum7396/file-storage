@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,7 +76,6 @@ public class FileStorageService {
         return ResponseEntity.ok().body(response);  // 응답 반환
     }
 
-
     public Resource loadFileAsResource(String fileLocation) throws FileNotFoundException {
         Path uploadPath = Paths.get(this.uploadPath+"/"+fileLocation);
         Resource resource = null;
@@ -89,6 +89,22 @@ public class FileStorageService {
             }
         } catch (MalformedURLException ex) {
             throw new FileNotFoundException("File not found " + fileLocation);
+        }
+    }
+
+    public boolean deleteFile(String fileLocation) {
+        try {
+            // 파일을 삭제하는 로직을 구현하세요.
+            // 예를 들어, java.io.File 클래스를 사용하여 파일을 삭제할 수 있습니다.
+            File file = new File(fileLocation);
+            if (file.exists()) {
+                return file.delete(); // 파일 삭제 성공 시 true를 반환
+            } else {
+                return false; // 파일이 존재하지 않는 경우 false를 반환
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // 파일 삭제 중 오류가 발생한 경우 false를 반환
         }
     }
 }
