@@ -1,6 +1,7 @@
 package filestorage.configuration;
 
 import filestorage.model.Response;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,6 @@ public class ErrorResponseAdvice {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
 		e.printStackTrace();
         responseResult = Response.builder()
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message("서버쪽 오류가 발생했습니다. 관리자에게 문의하십시오")
                 .result(resultMap).build();
         return ResponseEntity.internalServerError().body(responseResult);
@@ -35,10 +34,20 @@ public class ErrorResponseAdvice {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
 		e.printStackTrace();
         responseResult = Response.builder()
-                .statusCode(HttpStatus.UNAUTHORIZED.value())
-                .status(HttpStatus.UNAUTHORIZED)
                 .message("인증되지 않은 사용자입니다.")
                 .result(resultMap).build();
         return ResponseEntity.internalServerError().body(responseResult);
+	}
+
+	@ExceptionHandler(ExpiredJwtException.class)
+	public ResponseEntity handleExpiredJwtException(ExpiredJwtException e) {
+		System.out.println("ExpiredJwtException");
+		Response responseResult;
+		Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+		e.printStackTrace();
+		responseResult = Response.builder()
+				.message("로그인 시간이 만료되었습니다.")
+				.result(resultMap).build();
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseResult);
 	}
 }

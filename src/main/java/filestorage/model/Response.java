@@ -11,8 +11,6 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 public class Response {
-    int statusCode;
-    HttpStatus status;
     String message;
     Map<String,Object> result;
 }
