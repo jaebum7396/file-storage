@@ -99,7 +99,7 @@ public class FileStorageController {
 
     @DeleteMapping("/delete")
     @Operation(summary = "파일 삭제", description = "파일을 삭제합니다.")
-    public ResponseEntity<Response> delete(HttpServletRequest request, @RequestParam String fileLocation) {
+    public ResponseEntity<Response> delete(HttpServletRequest request, @RequestParam String fileLocation) throws Exception {
         Response response;
         HashMap<String, Object> resultMap = new HashMap<>();  // 결과를 담을 해시맵 생성
         String path = "";  // division 변수를 path 변수에 할당
@@ -112,22 +112,17 @@ public class FileStorageController {
         path = domainCd+"/"+userCd+"/";  // path 변수에 도메인 코드, 사용자 코드, 사용자 ID를 포함한 경로 생성
         System.out.println("path : "+path+" / "+"fileLocation : "+fileLocation);  // 생성된 경로 출력
 
-        try {
-            // 파일 삭제 서비스를 사용하여 파일을 삭제
-            boolean deleted = fileStorageService.deleteFile(fileLocation);
-            if (deleted) {
-                resultMap.put("fileLocation", fileLocation);
-                response = Response.builder()
-                        .statusCode(HttpStatus.OK.value())
-                        .status(HttpStatus.OK)
-                        .message("요청 성공")
-                        .result(resultMap).build();
-                return ResponseEntity.ok().body(response);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        boolean deleted = fileStorageService.deleteFile(fileLocation);
+        if (deleted) {
+            resultMap.put("fileLocation", fileLocation);
+            response = Response.builder()
+                    .statusCode(HttpStatus.OK.value())
+                    .status(HttpStatus.OK)
+                    .message("요청 성공")
+                    .result(resultMap).build();
+            return ResponseEntity.ok().body(response);
+        }else {
+            throw new Exception("파일을 찾을 수 없습니다.");
         }
     }
 }
