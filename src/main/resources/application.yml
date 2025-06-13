@@ -24,3 +24,14 @@ spring:
       matching-strategy: ant_path_matcher
 file:
   uploadDir: ./images
+
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    com:
+      codism: info
+    root: error
+    org:
+      hibernate:
+        SQL: debug
+    org.springframework.jdbc: DEBUG  # SQL 실행 로그 확인
