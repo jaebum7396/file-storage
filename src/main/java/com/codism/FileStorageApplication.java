@@ -1,6 +1,6 @@
-package filestorage;
+package com.codism;
 
-import filestorage.configuration.FileStorageConfig;
+import com.codism.config.FileStorageConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;

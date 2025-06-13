@@ -1,45 +1,78 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.7.11'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'org.springframework.boot' version '3.2.3'
+	id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'com'
+group = 'com.codismart'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
 
 repositories {
 	mavenCentral()
 }
 
-ext {
-	set('springCloudVersion', "2021.0.5")
-}
-
 dependencies {
-	//swagger
-	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-
-	//common
-	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation group: 'org.json', name: 'json', version: '20180813'
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-
-	//security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
-
-	//data
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	// Swagger - 기존 의존성을 모두 제거하고 이것으로 대체
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
 	//cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	//common
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-devtools'
+
+	// WebFlux for WebClient
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// JWT 관련 의존성
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+	implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+	implementation group: 'org.json', name: 'json', version: '20180813'
+
+	// Security
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
+	// Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	// Redis Stream을 위한 의존성
+	implementation 'io.lettuce:lettuce-core:6.3.0.RELEASE'
+
+	// 커넥션 풀 (레디스 연결 안정성 향상)
+	implementation 'org.apache.commons:commons-pool2'
+
+	implementation 'redis.clients:jedis:4.3.1'  // 최신 버전으로 조정 가능
+
+	//data
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+}
+
+ext {
+	set('springCloudVersion', "2023.0.0")
+	generatedJavaSourceDir = "src/generated/java"
 }
 
 dependencyManagement {
@@ -48,6 +81,11 @@ dependencyManagement {
 	}
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+tasks {
+	processResources {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	}
+	test {
+		useJUnitPlatform()
+	}
 }

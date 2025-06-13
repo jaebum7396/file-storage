@@ -1,9 +1,8 @@
-package filestorage.model;
+package com.codism.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 

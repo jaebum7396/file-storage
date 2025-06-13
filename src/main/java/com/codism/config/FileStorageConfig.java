@@ -1,4 +1,4 @@
-package filestorage.configuration;
+package com.codism.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

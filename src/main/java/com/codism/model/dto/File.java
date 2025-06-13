@@ -1,4 +1,4 @@
-package filestorage.model;
+package com.codism.model.dto;
 
 import lombok.Builder;
 import lombok.Data;
