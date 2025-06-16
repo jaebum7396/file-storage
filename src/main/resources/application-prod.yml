@@ -1,0 +1,3 @@
+cloud:
+  gateway:
+    uri: ${GATEWAY_URI}

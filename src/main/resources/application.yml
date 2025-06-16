@@ -1,5 +1,5 @@
 server:
-  port: '7100'
+  port: '8080'
 
 eureka:
   client:
@@ -12,7 +12,9 @@ spring:
   application:
     name: file-storage
   profiles:
-    active: deploy
+    #active: local
+    active: dev
+    #active: prod
   servlet:
     multipart:
       enabled: 'true'

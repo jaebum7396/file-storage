@@ -16,10 +16,10 @@ import java.util.List;
 @Configuration
 public class SwaggerConfig {
 
-    @Value("${spring.application.name:user}")
+    @Value("${spring.application.name:file-storage}")
     private String serviceName;
 
-    @Value("${server.port:8081}") // application.properties에서 포트 설정을 가져옴, 기본값은 8081
+    @Value("${server.port:8080}") // application.properties에서 포트 설정을 가져옴, 기본값은 8081
     private String port; // 로컬 개발용 포트
 
     @Bean
@@ -38,7 +38,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(
                         new Info()
-                                .title("MATCHER API")
+                                .title(serviceName + " API")
                                 .description("API 문서")
                                 .version("1.0.0")
                                 .contact(
