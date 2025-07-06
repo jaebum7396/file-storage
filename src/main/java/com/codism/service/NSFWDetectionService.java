@@ -166,9 +166,10 @@ public class NSFWDetectionService {
      */
     private boolean isInappropriateContent(SafeSearchAnnotation annotation) {
         // 성인, 선정적, 폭력적 콘텐츠 중 하나라도 임계값 이상이면 부적절한 콘텐츠로 판단
-        return isLikelyContent(annotation.getAdult()) ||
-                isLikelyContent(annotation.getRacy()) ||
-                isLikelyContent(annotation.getViolence());
+        return isLikelyContent(annotation.getAdult())
+                //||isLikelyContent(annotation.getRacy())
+                //||isLikelyContent(annotation.getViolence())
+                ;
     }
 
     /**
