@@ -25,7 +25,7 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 file:
-  uploadDir: ./images
+  upload-path: ./images
 
 # Google Cloud Vision API 설정
 google:
