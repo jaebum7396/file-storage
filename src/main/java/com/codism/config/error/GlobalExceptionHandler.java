@@ -4,6 +4,7 @@ import com.codism.config.error.entity.ApiException;
 import com.codism.config.error.entity.ErrorEntity;
 import com.codism.config.error.entity.ErrorEntityBody;
 import com.codism.config.error.type.ErrorCode;
+import com.codism.exception.AdultContentException;
 import com.codism.exception.CustomException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,6 +29,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    /**
+     * 성인 이미지 감지 예외 처리
+     */
+    @ExceptionHandler(AdultContentException.class)
+    protected ResponseEntity<ErrorEntityBody> handleAdultContentException(AdultContentException e) {
+        log.warn("성인 이미지 감지: {}", e.getMessage());
+        return ErrorEntity.status(ErrorCode.ADULT_CONTENT).body(e.getMessage());
+    }
+
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<ErrorEntityBody> handleCustomException(CustomException e) {
         log.error("CustomException - Code: {}, Status: {}, Message: {}",

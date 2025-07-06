@@ -15,6 +15,7 @@ public enum ErrorCode {
     DUPLICATE_PRODUCT_CODE(400, HttpStatus.BAD_REQUEST, "중복된 상품 코드"),
     NOT_REFUND(400, HttpStatus.BAD_REQUEST, "환불 불가"),
     NOT_DELIVERED(400, HttpStatus.BAD_REQUEST, "배송 불가"),
+    ADULT_CONTENT(400, HttpStatus.BAD_REQUEST, "성인 이미지는 업로드할 수 없습니다"), // 성인 이미지 관련 코드 추가
 
     // 404: Not Found
     NOT_FOUND(404, HttpStatus.NOT_FOUND, "해당 정보를 찾을 수 없습니다"),

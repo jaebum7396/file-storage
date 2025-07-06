@@ -27,6 +27,13 @@ spring:
 file:
   uploadDir: ./images
 
+# Google Cloud Vision API 설정
+google:
+  vision:
+    api:
+      enabled: true  # Google Cloud Vision API 활성화 여부
+      threshold: LIKELY  # VERY_UNLIKELY, UNLIKELY, POSSIBLE, LIKELY, VERY_LIKELY 중 하나
+
 logging:
   config: classpath:logback-spring.xml
   level:

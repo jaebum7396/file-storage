@@ -68,6 +68,12 @@ dependencies {
 	//data
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// Google Cloud Vision API
+	implementation 'com.google.cloud:google-cloud-vision:3.46.0'
+
+	// 이미지 처리를 위한 의존성 (파일 업로드 서비스에서 여전히 필요할 수 있음)
+	implementation 'org.imgscalr:imgscalr-lib:4.2'
 }
 
 ext {
